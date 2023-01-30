@@ -25,7 +25,7 @@ public class UserResource {
 	@Autowired
 	private UserService service;
 	
-	@GetMapping
+	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<UserDTO>> findAll() {
 		List<User> list = service.findAll();
 		List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
@@ -45,6 +45,12 @@ public class UserResource {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 		
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Void> deleteById(@PathVariable String id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 	
 }
